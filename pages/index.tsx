@@ -3,6 +3,11 @@ import clientPromise from '../lib/mongodb';
 import { InferGetServerSidePropsType } from 'next';
 import { useEffect, useState } from 'react';
 
+interface wo {
+  woNumber: string;
+  problem: String;
+}
+
 export async function getServerSideProps(context: any) {
   try {
     await clientPromise;
@@ -65,11 +70,8 @@ export default function Home({
         </p>
 
         <div className="grid">
-          {workOrders.map((workOrder) => (
-            <div className="card" key={workOrder.woNumber}>
-              <h2>{workOrder.woNumber}</h2>
-              <p>{workOrder.problem}</p>
-            </div>
+          {workOrders.map((workOrder: wo, index) => (
+            <div key={index}>{workOrder.woNumber}</div>
           ))}
         </div>
       </main>
