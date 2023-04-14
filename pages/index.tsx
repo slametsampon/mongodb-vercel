@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import clientPromise from '../lib/mongodb';
 import { InferGetServerSidePropsType } from 'next';
+import { useEffect, useState } from 'react';
 
 export async function getServerSideProps(context: any) {
   try {
@@ -28,6 +29,16 @@ export async function getServerSideProps(context: any) {
 export default function Home({
   isConnected,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [workOrders, setWorkOrders] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const results = await fetch('/api/list');
+      const resultsJson = await results.json();
+      setWorkOrders(resultsJson);
+    })();
+  }, []);
+
   return (
     <div className="container">
       <Head>
@@ -54,35 +65,12 @@ export default function Home({
         </p>
 
         <div className="grid">
-          <a href="https://nextjs.org/docs" className="card">
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className="card">
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className="card"
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="card"
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+          {workOrders.map((workOrder) => (
+            <div className="card" key={workOrder.woNumber}>
+              <h2>{workOrder.woNumber}</h2>
+              <p>{workOrder.problem}</p>
+            </div>
+          ))}
         </div>
       </main>
 
