@@ -71,7 +71,10 @@ export default function Home({
 
         <div className="grid">
           {workOrders.map((workOrder: wo, index) => (
-            <div key={index}>{workOrder.woNumber}</div>
+            <div className="card" key={index}>
+              <h2>{workOrder.woNumber}</h2>
+              <p>{workOrder.problem}</p>
+            </div>
           ))}
         </div>
       </main>
